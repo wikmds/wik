@@ -120,38 +120,49 @@ class Emulator:
         """
         return "UnixEmulator"
 
-    def tree(self):
+    def tree(self, path=None, prefix=""):
         """
-        Выполняет команду 'tree': выводит структуру каталогов и файлов.
+        Команда tree для отображения корректной иерархии файловой структуры.
+        Теперь фильтрует вложенные элементы корректно.
         """
-        def list_tree(directory, indent=""):
-            """
-            Рекурсивная функция для вывода дерева файлов и директорий.
-            """
-            tree_str = ""
-            members = [f for f in self.tar_ref.getmembers() if f.name.startswith(directory)]
+        if path is None:
+            path = self.current_dir
 
-            # Группируем по директориям
-            dirs = set()
-            for f in members:
-                relative_path = f.name[len(directory):].lstrip('/')
-                if '/' in relative_path:
-                    dirs.add(relative_path.split('/')[0])
+        # Получаем все элементы, находящиеся на текущем уровне
+        members = [
+            f.name for f in self.tar_ref.getmembers()
+            if f.name.startswith(path) and f.name != path
+        ]
 
-            # Выводим директории
-            for dir_name in sorted(dirs):
-                tree_str += f"{indent}{dir_name}/\n"
-                tree_str += list_tree(os.path.join(directory, dir_name), indent + "    ")
+        # Оставляем только те элементы, которые находятся на текущем уровне
+        dirs = set()
+        files = set()
+        for member in members:
+            relative_path = member[len(path):].lstrip('/')
+            # Только файлы или директории текущего уровня
+            if '/' not in relative_path:
+                if any(f.name.startswith(member + "/") for f in self.tar_ref.getmembers()):
+                    dirs.add(relative_path)
+                else:
+                    files.add(relative_path)
 
-            # Выводим файлы
-            for f in sorted(members, key=lambda x: x.name):  # Сортировка по имени файла
-                relative_path = f.name[len(directory):].lstrip('/')
-                if '/' not in relative_path:
-                    tree_str += f"{indent}{relative_path}\n"
+        # Сортировка
+        dirs = sorted(dirs)
+        files = sorted(files)
 
-            return tree_str
+        # Генерация результата
+        result = ""
+        for dir_name in dirs:
+            result += f"{prefix}[+] {dir_name}\n"
+            # Рекурсивный вызов
+            result += self.tree(os.path.join(path, dir_name), prefix + "    ")
 
-        return list_tree(self.current_dir)
+        for file_name in files:
+            result += f"{prefix}- {file_name}\n"
+
+        return result
+
+
 
 
     def head(self, path):
