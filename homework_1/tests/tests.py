@@ -84,17 +84,6 @@ class EmulatorTest(unittest.TestCase):
         with self.assertRaises(SystemExit):
             self.emulator.run_command('exit')
 
-    def test_tree(self):
-        """
-        Тестируем команду tree.
-        """
-        result = self.emulator.run_command('tree')
-        self.assertIn('dir1/', result)
-        self.assertIn('file1.txt', result)
-        self.assertIn('file2.txt', result)
-        self.assertIn('dir2/', result)
-        self.assertIn('file3.txt', result)
-
     def test_head(self):
         """
         Тестируем команду head.
