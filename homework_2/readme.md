@@ -98,7 +98,7 @@ pytest unittest tests/tests.py
 - **Python 3.6** или более поздней версии.
 
 ### Пример вывода граф
-![граф зависимостей](image.png)
+![граф зависимостей](dependency_graph.png.png)
 
 ## Вывод тестов
 ```
