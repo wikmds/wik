@@ -1,0 +1,11 @@
+|| Пример конфигурации с константами и базовыми вычислениями
+set speed = 10,
+set maxpower = 5,
+
+let = .(abs(speed + 5) + pow(maxpower, 2)).
+
+actions = ["move", "stop"]
+parameters = {
+    max_load => 100,
+    tolerance => 12
+}

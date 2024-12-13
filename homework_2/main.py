@@ -16,7 +16,9 @@ class DependencyVisualizer:
         self.output_file = self.config["output_file"]
         self.dependencies = defaultdict(list)
 
-    def fetch_dependencies(self, group_id, artifact_id, version):
+    def fetch_dependencies(self, group_id, artifact_id, version, depth=3):
+        if depth == 0:
+            return
         group_path = group_id.replace('.', '/')
         pom_url = f"{self.repository_url}{group_path}/{artifact_id}/{version}/{artifact_id}-{version}.pom"
         print(f"Fetching dependencies from: {pom_url}")
@@ -29,6 +31,7 @@ class DependencyVisualizer:
                 for dep_group_id, dep_artifact_id, dep_version in dependencies_found:
                     dep_full = f"{dep_group_id}:{dep_artifact_id}:{dep_version}"
                     self.dependencies[f"{group_id}:{artifact_id}:{version}"].append(dep_full)
+                    self.fetch_dependencies(dep_group_id, dep_artifact_id, dep_version, depth-1)
             else:
                 print(f"Could not fetch dependencies: {response.status_code}")
         except Exception as e:

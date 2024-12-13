@@ -1,0 +1,11 @@
+|| Пример с массивами и использованием вычислений
+set acceleration = 3,
+
+let = .(pow(acceleration, 3)).
+
+actions = ["move", "turn", "stop"]
+parameters = {
+    max_load => 150,
+    tolerance => 15,
+    thresholds => [10, 20, 30],
+}

@@ -1,0 +1,11 @@
+|| Пример с словарями и использованием abs
+set initialspeed = 15,
+set basepower = 2,
+
+let = .(abs(initialspeed) + 20).
+
+actions = ["move", "turn"]
+parameters = {
+    max_load => 200,
+    tolerance => 10,
+}
