@@ -3,7 +3,7 @@
 ```
 dot -Tpng civgraph.txt -o civgraph.png
 ```
-![civgraph](https://github.com/wikmds/wik/tree/main/images/civgraph.png) 
+![civgraph](./images/civgraph.png) 
 
 ## Задание 1
 Написать программу на Питоне, которая транслирует граф зависимостей civgraph в makefile в духе примера выше. Для мало знакомых с Питоном используется упрощенный вариант civgraph: civgraph.json.
